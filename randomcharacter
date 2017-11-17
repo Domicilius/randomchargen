@@ -8,8 +8,12 @@ from optparse import OptionParser
 #       from 5e D&D books. Useful for creating NPCs or getting an idea for
 #       a new PC. 
 
+
 class character( object ):
+'''Object to store all character vars'''
     def __init__( self ):
+        
+        # Initialize all starting vars
         self.background = None
         self.trait = None
         self.ideal = None
@@ -19,17 +23,20 @@ class character( object ):
         self.race = None
 
 def choosebackground(character):
-    '''Choose background, trait, ideal, bond and flaw for a character'''
+    '''Function to choose background/trait/ideal/bond/flaw for a character'''
 
+    # Create list of backgrounds from 5e
     backgrounds = ['Acolyte', 'Charlatan', 'Criminal', 'Entertainer', 
                     'Folk Hero', 'Guild Artisan', 'Hermit', 'Noble', 
                     'Outlander', 'Sage', 'Sailor', 'Soldier', 'Urchin']
     
+    # If user passes in their own background or doesn't want one, catch that
     if character.background == None:
         character.background = ''.join(map(str, (choice(backgrounds, 1))))
     elif character.background not in backgrounds:
         return 'bad background value given'
 
+    # Determine trait/bond/flaw based on background
     if character.background=='Acolyte':
         traits = [
             'I idolize a particular hero of my faith, and constantly'
@@ -658,33 +665,42 @@ def choosebackground(character):
         character.flaw = ''.join(map(str, (choice(flaws, 1))))
 
 def chooseclass(character):
-    '''Choose class for a character'''
+    '''Function to choose class for a character'''
 
+    # Fill in classes from 5e
     jobclasses = [
         'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin',
         'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'
         ]
 
+    # Catch if user passes in class or doesn't want one generated
     if character.jobclass == None:
         character.jobclass = ''.join(map(str, (choice(jobclasses, 1))))
     elif character.jobclass not in jobclasses:
         return 'bad class value given'
 
 def chooserace(character):
-    '''Choose race for a character'''
+    '''function to choose race for a character'''
 
+    # Fill in races from PHB
     races = [
         'Dwarf', 'Elf', 'Halfling', 'Human', 'Dragonborn', 'Gnome',
         'Half-Elf', 'Half-Orc', 'Tiefling'
         ]
 
+    # Catch if user passes in race or doesn't want one generated
     if character.race == None:
         character.race = ''.join(map(str, (choice(races, 1))))
     elif character.race not in races:
         return 'bad class value given'
 
 def main():
+    ''' Return a generated tabletop character'''
+
+    # Set up parsing for command line args
     parser = OptionParser()
+
+    # Allow users to specify or negate normally generated vars 
     parser.add_option("-b", "--background", help="set background manually to"
             " BACKGROUND", metavar="BACKGROUND", dest="userbackground")
     parser.add_option("-c", "--class", help="set class manually to"
@@ -694,8 +710,10 @@ def main():
     
     opts, args = parser.parse_args()
     
+    # Create character to be generated
     newcharacter = character()
     
+    # If user negated var, skip; otherwise generate var
     if opts.userbackground:        
         if opts.userbackground != "None":
             newcharacter.background = opts.userbackground
@@ -703,6 +721,7 @@ def main():
     else:
         choosebackground(newcharacter)
 
+    # If user negated var, skip; otherwise generate var
     if opts.userclass:        
         if opts.userclass != "None":
             newcharacter.jobclass = opts.userclass
@@ -710,19 +729,23 @@ def main():
     else:
         chooseclass(newcharacter)
     
+    # If user negated var, skip; otherwise generate var
     if opts.userrace:        
         if opts.userrace != "None":
             newcharacter.race = opts.userrace
             chooserace(newcharacter)
     else:
         chooserace(newcharacter)
-   
+  
+    # If user negated var, skip; otherwise print var
     if opts.userrace != "None":
         print newcharacter.race
 
+    # If user negated var, skip; otherwise print var
     if opts.userclass != "None":
         print newcharacter.jobclass
 
+    # If user negated var, skip; otherwise print var
     if opts.userbackground != "None":
         print newcharacter.background
         print newcharacter.trait
