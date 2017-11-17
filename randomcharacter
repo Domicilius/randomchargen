@@ -15,7 +15,8 @@ class character( object ):
         self.ideal = None
         self.bond = None
         self.flaw = None
-
+        self.jobclass = None
+        self.race = None
 
 def choosebackground(character):
     '''Choose background, trait, ideal, bond and flaw for a character'''
@@ -656,14 +657,40 @@ def choosebackground(character):
         character.bond = ''.join(map(str, (choice(bonds, 1))))
         character.flaw = ''.join(map(str, (choice(flaws, 1))))
 
-# def chooseclass():
+def chooseclass(character):
+    '''Choose class for a character'''
 
+    jobclasses = [
+        'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin',
+        'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'
+        ]
 
+    if character.jobclass == None:
+        character.jobclass = ''.join(map(str, (choice(jobclasses, 1))))
+    elif character.jobclass not in jobclasses:
+        return 'bad class value given'
+
+def chooserace(character):
+    '''Choose race for a character'''
+
+    races = [
+        'Dwarf', 'Elf', 'Halfling', 'Human', 'Dragonborn', 'Gnome',
+        'Half-Elf', 'Half-Orc', 'Tiefling'
+        ]
+
+    if character.race == None:
+        character.race = ''.join(map(str, (choice(races, 1))))
+    elif character.race not in races:
+        return 'bad class value given'
 
 def main():
     parser = OptionParser()
     parser.add_option("-b", "--background", help="set background manually to"
             " BACKGROUND", metavar="BACKGROUND", dest="userbackground")
+    parser.add_option("-c", "--class", help="set class manually to"
+            " CLASS", metavar="CLASS", dest="userclass")
+    parser.add_option("-r", "--race", help="set race manually to"
+            " RACE", metavar="RACE", dest="userrace")
     
     opts, args = parser.parse_args()
     
@@ -675,6 +702,26 @@ def main():
             choosebackground(newcharacter)
     else:
         choosebackground(newcharacter)
+
+    if opts.userclass:        
+        if opts.userclass != "None":
+            newcharacter.jobclass = opts.userclass
+            chooseclass(newcharacter)
+    else:
+        chooseclass(newcharacter)
+    
+    if opts.userrace:        
+        if opts.userrace != "None":
+            newcharacter.race = opts.userrace
+            chooserace(newcharacter)
+    else:
+        chooserace(newcharacter)
+   
+    if opts.userrace != "None":
+        print newcharacter.race
+
+    if opts.userclass != "None":
+        print newcharacter.jobclass
 
     if opts.userbackground != "None":
         print newcharacter.background
