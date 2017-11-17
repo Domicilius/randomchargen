@@ -656,11 +656,6 @@ def choosebackground(character):
         character.bond = ''.join(map(str, (choice(bonds, 1))))
         character.flaw = ''.join(map(str, (choice(flaws, 1))))
 
-def choose
-
-
-
-
 def main():
     parser = OptionParser()
     parser.add_option("-b", "--background", help="set background manually to"
@@ -670,9 +665,7 @@ def main():
     
     newcharacter = character()
     
-    if opts.userbackground:
-        
-        
+    if opts.userbackground:        
         newcharacter.background = opts.userbackground
     
     choosebackground(newcharacter)
@@ -682,34 +675,5 @@ def main():
     print newcharacter.ideal
     print newcharacter.bond
     print newcharacter.flaw
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 main()
