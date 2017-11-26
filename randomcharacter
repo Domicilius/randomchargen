@@ -17,6 +17,28 @@ class character( object ):
         self.flaw = None
         self.jobclass = None
         self.race = None
+        self.str = 0 
+        self.dex = 0
+        self.con = 0
+        self.int = 0
+        self.wis = 0
+        self.cha = 0
+    def __str__(self):
+        returner = self.race
+        if self.jobclass != 'None':
+            returner += " "+self.jobclass
+        returner += " ("+self.background+")\n"
+        returner += "I value "+self.ideal
+        returner += "\n"+self.trait
+        returner += "\n"+self.bond
+        returner += "\n"+self.flaw
+       
+        if self.str != 0:
+            returner += "\n"
+            returner +="\n"+str(self.str)+" "+str(self.dex)+" "+str(self.con)
+            returner +=" "+str(self.int)+" "+str(self.wis)+" "+str(self.cha)
+        
+        return returner
 
 def choosebackground(character):
     '''Function to choose background/trait/ideal/bond/flaw for a character'''
@@ -664,6 +686,7 @@ def choosebackground(character):
 def chooseclass(character):
     '''Function to choose class for a character'''
     # Fill in classes from 5e
+    # Remember to add in default stats for classes if you add any
     jobclasses = [
         'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin',
         'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'
@@ -678,11 +701,14 @@ def chooseclass(character):
         return 'bad class value given'
 
 def chooserace(character):
-    '''function to choose race for a character'''
+    '''Function to choose race for a character'''
     # Fill in races from PHB
+
     races = [
-        'Dwarf', 'Elf', 'Halfling', 'Human', 'Dragonborn', 'Gnome',
-        'Half-Elf', 'Half-Orc', 'Tiefling'
+        'Hill Dwarf', 'Mountain Dwarf', 'High Elf', 'Wood Elf', 'Dark Elf',
+        'Lightfoot Halfling', 'Stout Halfling', 'Human', 'Dragonborn', 
+        'Forest Gnome', 'Rock Gnome', 'Half-Elf', 'Half-Orc', 'Tiefling',
+        'Dwarf', 'Elf', 'Halfling', 'Gnome'
         ]
 
     # Catch if user passes in race or doesn't want one generated
@@ -692,6 +718,223 @@ def chooserace(character):
         return
     elif character.race not in races:
         return 'bad class value given'
+
+def choosestats(character):
+    '''Function to choose stats for a character'''
+    if character.jobclass == "None":
+        randomstats = choice([15, 14, 13, 12, 10, 8], 6, replace=False)
+        character.str = randomstats[0]
+        character.dex = randomstats[1]
+        character.con = randomstats[2]
+        character.int = randomstats[3]
+        character.wis = randomstats[4]
+        character.cha = randomstats[5]
+        
+    elif character.jobclass == "Barbarian":
+        character.str = 15
+        character.dex = 12
+        character.con = 14
+        character.int = 8
+        character.wis = 13
+        character.cha = 10
+    
+    elif character.jobclass == "Bard":
+        character.str = 8
+        character.dex = 14
+        character.con = 12
+        character.int = 13
+        character.wis = 10
+        character.cha = 15
+    
+    elif character.jobclass == "Cleric":
+        character.str = 14
+        character.dex = 8
+        character.con = 12
+        character.int = 10
+        character.wis = 15
+        character.cha = 13
+    
+    elif character.jobclass == "Druid":
+        character.str = 8
+        character.dex = 12 
+        character.con = 14
+        character.int = 13
+        character.wis = 15
+        character.cha = 10
+    
+    elif character.jobclass == "Fighter":
+        statsroll = ''.join(map(str, (choice(['str', 'dex'], 1))))
+        if statsroll == "str":
+            character.str = 15
+            character.dex = 12
+            character.con = 14
+            character.int = 10
+            character.wis = 13
+            character.cha = 8
+        else:
+            character.str = 12
+            character.dex = 15
+            character.con = 14
+            character.int = 10
+            character.wis = 13
+            character.cha = 8
+    
+    elif character.jobclass == "Monk":
+        character.str = 10
+        character.dex = 15
+        character.con = 13
+        character.int = 12
+        character.wis = 14
+        character.cha = 8
+    
+    elif character.jobclass == "Paladin":
+        character.str = 15
+        character.dex = 10
+        character.con = 13
+        character.int = 8
+        character.wis = 12
+        character.cha = 14
+    
+    elif character.jobclass == "Ranger":
+        statsroll = ''.join(map(str, (choice(['str', 'dex'], 1))))
+        if statsroll == "str":
+            character.str = 15
+            character.dex = 12
+            character.con = 13
+            character.int = 10
+            character.wis = 14
+            character.cha = 8
+        else:
+            character.str = 12
+            character.dex = 15
+            character.con = 13
+            character.int = 10
+            character.wis = 14
+            character.cha = 8
+    
+    elif character.jobclass == "Rogue":
+        statsroll = ''.join(map(str, (choice(['int', 'cha'], 1))))
+        if statsroll == "int":
+            character.str = 8
+            character.dex = 15
+            character.con = 12
+            character.int = 14
+            character.wis = 13
+            character.cha = 10
+        else:
+            character.str = 8
+            character.dex = 15
+            character.con = 12
+            character.int = 10
+            character.wis = 13
+            character.cha = 14
+    
+    elif character.jobclass == "Sorcerer":
+        character.str = 8
+        character.dex = 10
+        character.con = 14
+        character.int = 12
+        character.wis = 13
+        character.cha = 15
+    
+    elif character.jobclass == "Warlock":
+        character.str = 10
+        character.dex = 13
+        character.con = 14
+        character.int = 12
+        character.wis = 8
+        character.cha = 15
+    
+    elif character.jobclass == "Wizard":
+        character.str = 8
+        character.dex = 12
+        character.con = 14
+        character.int = 15
+        character.wis = 10
+        character.cha = 13
+    
+def chooseracestatbonuses(character):
+    '''Function to add racial stat modifiers to generated stats'''
+    if character.race == "Dwarf":
+        character.race = ''.join(map(str, (choice(
+            ['Hill Dwarf', 'Mountain Dwarf'], 1))))
+    elif character.race == "Elf":
+        character.race = ''.join(map(str, (choice(
+            ['High Elf', 'Wood Elf', 'Dark Elf'], 1))))
+
+    elif character.race == "Halfling":
+        character.race = ''.join(map(str, (choice(
+            ['Lightfoot Halfling', 'Stout Halfling'], 1))))
+    elif character.race == "Gnome":
+        character.race = ''.join(map(str, (choice(
+            ['Forest Gnome', 'Rock Gnome'], 1))))
+    
+    if character.race == "Human":
+        character.str += 1
+        character.dex += 1
+        character.con += 1
+        character.int += 1
+        character.wis += 1
+        character.cha += 1
+    elif character.race == "Dragonborn":
+        character.str += 2
+        character.cha += 1
+    elif character.race == "Half-Elf":
+        character.cha += 2
+        randomplus = choice([0, 1, 2, 3, 4], 2, replace=False)
+        if randomplus[0] == 0:
+            character.str += 1
+        if randomplus[0] == 1:
+            character.dex += 1
+        if randomplus[0] == 2:
+            character.con += 1
+        if randomplus[0] == 3:
+            character.int += 1
+        if randomplus[0] == 4:
+            character.wis += 1
+        if randomplus[1] == 0:
+            character.str += 1
+        if randomplus[1] == 1:
+            character.dex += 1
+        if randomplus[1] == 2:
+            character.con += 1
+        if randomplus[1] == 3:
+            character.int += 1
+        if randomplus[1] == 4:
+            character.wis += 1
+    elif character.race == "Half-Orc":
+        character.str += 2
+        character.con += 1
+    elif character.race == "Tiefling":
+        character.int += 1
+        character.cha += 2
+    elif character.race == "Hill Dwarf":
+        character.con += 2
+        character.wis += 1
+    elif character.race == "Mountain Dwarf":
+        character.str += 2
+        character.con += 2
+    elif character.race == "High Elf":
+        character.dex += 2
+        character.int += 1
+    elif character.race == "Wood Elf":
+        character.dex += 2
+        character.wis += 1
+    elif character.race == "Dark Elf":
+        character.dex += 2
+        character.cha += 1
+    elif character.race == "Lightfoot Halfling":
+        character.dex += 2
+        character.cha += 1
+    elif character.race == "Stout Halfling":
+        character.dex += 2
+        character.con += 1
+    elif character.race == "Forest Gnome":
+        character.dex += 1
+        character.int += 2
+    elif character.race == "Rock Gnome":
+        character.con += 1
+        character.int += 2
 
 def main():
     ''' Return a generated tabletop character'''
@@ -708,6 +951,10 @@ def main():
     parser.add_option("-r", "--race", help="set race manually to"
             " RACE, set to 'None' to not generate", 
             metavar="RACE", dest="userrace")
+    parser.add_option("-s", "--stats", help="set stats manually to"
+            " STATS in the form of 'STR, DEX, CON, INT, WIS, CHA', "
+            " set to 'None' to not generate", 
+            metavar="STATS", dest="userstats")
     
     opts, args = parser.parse_args()
     
@@ -734,21 +981,21 @@ def main():
         chooserace(newcharacter)
     else:
         chooserace(newcharacter)
-  
-    # If user negated var, skip; otherwise print var
-    if opts.userrace != "None":
-        print newcharacter.race
 
-    # If user negated var, skip; otherwise print var
-    if opts.userclass != "None":
-        print newcharacter.jobclass
-
-    # If user negated var, skip; otherwise print var
-    if opts.userbackground != "None":
-        print newcharacter.background
-        print newcharacter.trait
-        print newcharacter.ideal
-        print newcharacter.bond
-        print newcharacter.flaw
+    if opts.userstats != "None":       
+        if opts.userstats:
+            userstats = map(int, opts.userstats.split(','))
+            newcharacter.str = userstats[0]
+            newcharacter.dex = userstats[1]
+            newcharacter.con = userstats[2]
+            newcharacter.int = userstats[3]
+            newcharacter.wis = userstats[4]
+            newcharacter.cha = userstats[5]
+            chooseracestatbonuses(newcharacter)
+        else:
+            choosestats(newcharacter)
+            chooseracestatbonuses(newcharacter)
+    
+    print newcharacter
 
 main()
