@@ -6,6 +6,54 @@ from optparse import OptionParser
 #       from 5e D&D books. Useful for creating NPCs or getting an idea for
 #       a new PC. 
 
+races = [
+    'Hill Dwarf', 'Mountain Dwarf', 'High Elf', 'Wood Elf', 'Dark Elf',
+    'Lightfoot Halfling', 'Stout Halfling', 'Human', 'Dragonborn', 
+    'Forest Gnome', 'Rock Gnome', 'Half-Elf', 'Half-Orc', 'Tiefling',
+    'Dwarf', 'Elf', 'Halfling', 'Gnome'
+    ]
+
+backgrounds = [
+    'Acolyte', 'Charlatan', 'Criminal', 'Entertainer', 
+    'Folk Hero', 'Guild Artisan', 'Hermit', 'Noble', 
+    'Outlander', 'Sage', 'Sailor', 'Soldier', 'Urchin'
+    ]
+
+jobclasses = [
+    'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin',
+    'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'
+    ]
+
+skills = [
+    'Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 
+    'History', 'Insight', 'Intimidation', 'Investigation', 'Medicine', 
+    'Nature', 'Perception', 'Performance', 'Persuasion', 'Religion', 
+    'Sleight of Hand', 'Stealth', 'Survival'
+    ]
+
+languages = [
+    'Gnomish', 'Draconic', 'Orcish', 'Dwarven', 'Elvish', 
+    'Halfling', 'Common'
+    ]
+
+instruments = [
+    'Bagpipes', 'Drum', 'Dulcimer', 'Flute', 'Lute', 'Lyre', 'Horn',
+    'Pan Flute', 'Shawm', 'Viol'
+    ]
+
+artisantools = [
+    'Alchemist\'s Supplies', 'Brewer\'s Supplies', 'Calligrapher\'s Supplies',
+    'Carpenter\'s tools', 'Cartographer\'s tools', 'Cobbler\'s tools',
+    'Cook\'s utensils', 'Glassblow\'s tools', 'Jeweler\'s tools',
+    'Leatherworker\'s tools', 'Mason\'s tools', 'Painter\'s Supplies',
+    'Potter\'s tools', 'Smith\'s tools', 'Tinker\'s tools',
+    'Weaver\'s tools', 'Woodcarver\'s tools'
+    ]
+
+gamingsets = [
+    'Dice set', 'Dragonchess set', 'Playing Card set', 'Three-Dragon Ante set'
+    ]
+
 class character( object ):
     '''Object to store all character vars'''
     def __init__( self ):
@@ -17,8 +65,18 @@ class character( object ):
         self.flaw = None
         self.jobclass = None
         self.race = None
+
         self.stat = [0] * 6
-    
+        
+        self.skillproficiency = []
+        self.armorproficiency = []
+        self.weaponproficiency = []
+        self.throwproficiency = []
+        self.toolproficiency = []
+        self.languageproficiency = []
+
+        self.proficiencybonus = 2
+
     def __str__(self):
         returner = self.race
         if self.jobclass != 'None':
@@ -36,6 +94,14 @@ class character( object ):
             returner +=" INT: "+str(self.stat[3])+" WIS: "+str(self.stat[4])
             returner += " CHA: "+str(self.stat[5])
         
+        print self.skillproficiency
+        print self.armorproficiency
+        print self.weaponproficiency
+        print self.throwproficiency
+        print self.toolproficiency
+        print self.languageproficiency
+
+
         return returner
 
 def choosebackground(character):
@@ -47,7 +113,7 @@ def choosebackground(character):
     
     # If user passes in their own background or doesn't want one, catch that
     if character.background == None:
-        character.background = ''.join(map(str, (choice(backgrounds, 1))))
+        character.background = ''.join(map(str, (choice(backgrounds, 1)[0])))
     elif character.background == "None":
         return
     elif character.background not in backgrounds:
@@ -106,10 +172,10 @@ def choosebackground(character):
             ]
 
         
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
 
     if character.background=='Charlatan':
         traits = [
@@ -159,10 +225,10 @@ def choosebackground(character):
             ' I\'ll run and preserve my own hide if the going gets tough.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Criminal':
         traits = [
             'I always have a plan for what to do when things go wrong.',
@@ -208,10 +274,10 @@ def choosebackground(character):
             ' that.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Entertainer':
         traits = [
             'I know a story relevant to almost every situation.',
@@ -256,10 +322,10 @@ def choosebackground(character):
             ' friends.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Folk Hero':
         traits = [
            'I judge people by their actions, not their words.', 'If someone'
@@ -303,10 +369,10 @@ def choosebackground(character):
             ' have trouble trusting in my allies.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Guild Artisan':
         traits = [
             'I believe that anything worth doing is worth doing right. I can\'t'
@@ -352,10 +418,10 @@ def choosebackground(character):
             ' by rivals.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Hermit':
         traits = [
             'I have been isolated for so long that I rarely speak, preferring'
@@ -400,10 +466,10 @@ def choosebackground(character):
             ' secrets and will not share them with anyone.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Noble':
         traits = [
             'My most eloquent flattery makes everyone I talk to feel like the'
@@ -447,10 +513,10 @@ def choosebackground(character):
             ' me.', 'By my words and actions, I often bring shame to my family.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Outlander':
         traits = [
             'I am driven by a wanderlust that led me far away from home.',
@@ -497,10 +563,10 @@ def choosebackground(character):
             ' way that the strong survive and the weak perish.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Sage':
         traits = [
             'I use polysyllabic words that convey the impression of great'
@@ -544,10 +610,10 @@ def choosebackground(character):
             ' keep a secret to save my life, or anyone else\'s.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Sailor':
         traits = [
             'My friends know they can rely on me, no matter what.', 'I work'
@@ -587,10 +653,10 @@ def choosebackground(character):
             ' come across.', 'My pride will probably lead to my destruction.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Soldier':
         traits = [
             'I am always polite and respectful.', 'I am haunted by memories'
@@ -632,10 +698,10 @@ def choosebackground(character):
             ' eat my armor than admit when I am wrong.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
     if character.background=='Urchin':
         traits = [
             'I hide scraps of food and trinkets in my pockets.', 'I ask a lot'
@@ -676,10 +742,10 @@ def choosebackground(character):
             'People who cannot take care of themselves get what they deserve.'
             ]
 
-        character.trait = ''.join(map(str, (choice(traits, 1))))
-        character.ideal = ''.join(map(str, (choice(ideals, 1))))
-        character.bond = ''.join(map(str, (choice(bonds, 1))))
-        character.flaw = ''.join(map(str, (choice(flaws, 1))))
+        character.trait = ''.join(map(str, (choice(traits, 1)[0])))
+        character.ideal = ''.join(map(str, (choice(ideals, 1)[0])))
+        character.bond = ''.join(map(str, (choice(bonds, 1)[0])))
+        character.flaw = ''.join(map(str, (choice(flaws, 1)[0])))
 
 def chooseclass(character):
     '''Function to choose class for a character'''
@@ -692,7 +758,7 @@ def chooseclass(character):
 
     # Catch if user passes in class or doesn't want one generated
     if character.jobclass == None:
-        character.jobclass = ''.join(map(str, (choice(jobclasses, 1))))
+        character.jobclass = ''.join(map(str, (choice(jobclasses, 1)[0])))
     elif character.jobclass == "None":
         return
     elif character.jobclass not in jobclasses:
@@ -711,7 +777,7 @@ def chooserace(character):
 
     # Catch if user passes in race or doesn't want one generated
     if character.race == None:
-        character.race = ''.join(map(str, (choice(races, 1))))
+        character.race = ''.join(map(str, (choice(races, 1)[0])))
     elif character.race == "None":
         return
     elif character.race not in races:
@@ -967,6 +1033,792 @@ def chooseracestatbonuses(character):
         character.stat[2] += 1
         character.stat[3] += 2
 
+
+def genextras(character):
+    '''function to determine proficiencies/gear of a character based on gen'''
+    if character.race == "None":
+        return
+    if character.background == "None":
+        return
+    if character.jobclass == "None":
+        return
+   
+    # Race Proficiency Block
+    if character.race == "Hill Dwarf":
+        character.toolproficiency.append(choice(['Smith\'s Tools', 'Brewer\'s Tools', 'Mason\'s Tools'], 1)[0])
+        
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Dwarven")
+
+    elif character.race == "Mountain Dwarf":
+        character.toolproficiency.append(choice(['Smith\'s Tools', 'Brewer\'s Tools', 'Mason\'s Tools'], 1)[0])
+        
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Dwarven")
+
+        character.armorproficiency.append("Light Armor")
+        character.armorproficiency.append("Medium Armor")
+
+    elif character.race == "High Elf":
+        character.skillproficiency.append("Perception")
+
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Elvish")
+  
+        character.weaponproficiency.append("Longsword")
+        character.weaponproficiency.append("Shortsword")
+        character.weaponproficiency.append("Shortbow")
+        character.weaponproficiency.append("Longbow")
+
+    elif character.race == "Wood Elf":
+        character.skillproficiency.append("Perception")
+
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Elvish")
+  
+        character.weaponproficiency.append("Longsword")
+        character.weaponproficiency.append("Shortsword")
+        character.weaponproficiency.append("Shortbow")
+        character.weaponproficiency.append("Longbow")
+
+    elif character.race == "Dark Elf":
+        character.skillproficiency.append("Perception")
+
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Elvish")
+   
+        character.weaponproficiency.append("Rapier")
+        character.weaponproficiency.append("Shortsword")
+        character.weaponproficiency.append("Hand Crossbow")
+  
+    elif character.race == "Lightfoot Halfling":
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Halfling")
+
+    elif character.race == "Stout Halfling":
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Halfling")
+
+    elif character.race == "Human":
+        character.languageproficiency.append("Common")
+        humanlangs = languages
+        humanlangs.remove('Common')
+        character.languageproficiency.append(choice(humanlangs, 1)[0][0])
+
+    elif character.race == "Dragonborn":
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Draconic")
+
+    elif character.race == "Forest Gnome":
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Gnomish")
+
+    elif character.race == "Rock Gnome":
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Gnomish")
+    
+    elif character.race == "Half-Elf":
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Elvish")
+        halfelflangs = languages
+        halfelflangs.remove('Common')
+        halfelflangs.remove('Elvish')
+        character.languageproficiency.append(halfelflangs, 1)[0][0]
+    
+        skillchoice = choice(skills, 2, replace=False)
+        character.skillproficiency.append(skillchoice[0])
+        character.skillproficiency.append(skillchoice[1])
+    
+    elif character.race == "Half-Orc":
+        character.skillproficiency.append("Intimidation")
+
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Orcish")
+
+    elif character.race == "Tiefling":
+        character.languageproficiency.append("Common")
+        character.languageproficiency.append("Infernal")
+    
+    # Background Proficiency Block
+    if character.background == "Acolyte":
+        character.skillproficiency.append("Insight")
+        character.skillproficiency.append("Religion")
+
+        done = False
+        while done == False:
+            langchoice = choice(languages, 1)[0]
+            if langchoice in character.languageproficiency:
+                continue
+            else:
+                character.languageproficiency.append(langchoice)
+                done = True
+        
+        done = False
+        while done == False:
+            langchoice = choice(languages, 1)[0]
+            if langchoice in character.languageproficiency:
+                continue
+            else:
+                character.languageproficiency.append(langchoice)
+                done = True
+
+    elif character.background == "Charlatan":
+        character.skillproficiency.append("Deception")
+        character.skillproficiency.append("Sleight of Hand")
+
+        character.toolproficiency.append("Disguise kit")
+        character.toolproficiency.append("Forgery kit")
+    
+    elif character.background == "Criminal":
+        character.skillproficiency.append("Deception")
+        character.skillproficiency.append("Stealth")
+
+        character.toolproficiency.append("Thieves' tools")
+        character.toolproficiency.append(choice(['Dice set', 'Dragonchess set', 'Playing Card set', 'Three-Dragon Ante set'], 1)[0])
+
+    elif character.background == "Entertainer":
+        character.skillproficiency.append("Acrobatics")
+        character.skillproficiency.append("Performance")
+
+        character.toolproficiency.append("Disguise kit")
+        
+        done = False
+        while done == False:
+            instrchoice = choice(instruments, 1)[0]
+            if instrchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(instrchoice)
+                done = True
+        
+    elif character.background == "Folk Hero":
+        character.skillproficiency.append("Animal Handling")
+        character.skillproficiency.append("Survival")
+
+        done = False
+        while done == False:
+            artisanchoice = choice(artisantools, 1)[0]
+            if artisanchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(artisanchoice)
+                done = True
+
+        character.toolproficiency.append("Land Vehicles")
+
+    elif character.background == "Guild Artisan":
+        character.skillproficiency.append("Insight")
+        character.skillproficiency.append("Persuasion")
+
+        done = False
+        while done == False:
+            artisanchoice = choice(artisantools, 1)[0]
+            if artisanchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(artisanchoice)
+                done = True
+
+        done = False
+        while done == False:
+            langchoice = choice(languages, 1)[0]
+            if langchoice in character.languageproficiency:
+                continue
+            else:
+                character.languageproficiency.append(langchoice)
+                done = True
+
+    elif character.background == "Hermit":
+        character.skillproficiency.append("Medicine")
+        character.skillproficiency.append("Religion")
+
+        character.toolproficiency.append("Herbalism kit")
+    
+        done = False
+        while done == False:
+            langchoice = choice(languages, 1)[0]
+            if langchoice in character.languageproficiency:
+                continue
+            else:
+                character.languageproficiency.append(langchoice)
+                done = True
+    
+    elif character.background == "Noble":
+        character.skillproficiency.append("History")
+        character.skillproficiency.append("Persuasion")
+
+        done = False
+        while done == False:
+            gamingchoice = choice(gamingsets, 1)[0]
+            if gamingchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(gamingchoice)
+                done = True
+        
+        done = False
+        while done == False:
+            langchoice = choice(languages, 1)[0]
+            if langchoice in character.languageproficiency:
+                continue
+            else:
+                character.languageproficiency.append(langchoice)
+                done = True
+
+    elif character.background == "Outlander":
+        character.skillproficiency.append("Athletics")
+        character.skillproficiency.append("Survival")
+
+        done = False
+        while done == False:
+            instrchoice = choice(instruments, 1)[0]
+            if instrchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(instrchoice)
+                done = True
+
+        done = False
+        while done == False:
+            langchoice = choice(languages, 1)[0]
+            if langchoice in character.languageproficiency:
+                continue
+            else:
+                character.languageproficiency.append(langchoice)
+                done = True
+   
+    elif character.background == "Sage":
+        character.skillproficiency.append("Arcana")
+        character.skillproficiency.append("History")
+
+        done = False
+        while done == False:
+            langchoice = choice(languages, 1)[0]
+            if langchoice in character.languageproficiency:
+                continue
+            else:
+                character.languageproficiency.append(langchoice)
+                done = True
+
+        done = False
+        while done == False:
+            langchoice = choice(languages, 1)[0]
+            if langchoice in character.languageproficiency:
+                continue
+            else:
+                character.languageproficiency.append(langchoice)
+                done = True
+
+    elif character.background == "Sailor":
+        character.skillproficiency.append("Athletics")
+        character.skillproficiency.append("Perception")
+
+        character.toolproficiency.append("Navigator\'s tools")
+        character.toolproficiency.append("Water Vehicles")
+
+    elif character.background == "Soldier":
+        character.skillproficiency.append("Athletics")
+        character.skillproficiency.append("Intimidation")
+
+        done = False
+        while done == False:
+            gamingchoice = choice(gamingsets, 1)[0]
+            if gamingchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(gamingchoice)
+                done = True
+
+        character.toolproficiency.append("Land Vehicles")
+
+    elif character.background == "Urchin":
+        character.skillproficiency.append("Sleight of Hand")
+        character.skillproficiency.append("Stealth")
+
+        character.toolproficiency.append("Disguise kit")
+        character.toolproficiency.append("Thieves\'s kit")
+    
+    # Class Proficiency Block
+    if character.jobclass == "Barbarian":
+        character.armorproficiency.append("Light Armor")
+        character.armorproficiency.append("Medium Armor")
+        character.armorproficiency.append("Shields")
+        
+        character.weaponproficiency.append("Simple Weapons")
+        character.weaponproficiency.append("Martial Weapons")
+
+        character.throwproficiency.append("Strength")
+        character.throwproficiency.append("Constitution")
+        
+        done = False
+        while done == False:
+            skillchoice = choice(['Animal Handling', 'Athletics', 'Intimidation', 'Nature', 'Perception', 'Survival'], 1)
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(['Animal Handling', 'Athletics', 'Intimidation', 'Nature', 'Perception', 'Survival'], 1)
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Bard":
+        character.armorproficiency.append("Light Armor")
+
+        character.weaponproficiency.append("Simple Weapons")
+        character.weaponproficiency.append("Hand Crossbows")
+        character.weaponproficiency.append("Longswords")
+        character.weaponproficiency.append("Rapiers")
+        character.weaponproficiency.append("Shortswords")
+
+        done = False
+        while done == False:
+            instrchoice = choice(instruments, 1)[0]
+            if instrchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(instrchoice)
+                done = True
+
+        done = False
+        while done == False:
+            instrchoice = choice(instruments, 1)[0]
+            if instrchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(instrchoice)
+                done = True
+
+        done = False
+        while done == False:
+            instrchoice = choice(instruments, 1)[0]
+            if instrchoice in character.toolproficiency:
+                continue
+            else:
+                character.toolproficiency.append(instrchoice)
+                done = True
+
+        character.throwproficiency.append("Dexterity")
+        character.throwproficiency.append("Charisma")
+
+        done = False
+        while done == False:
+            skillchoice = choice(skills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+        
+        done = False
+        while done == False:
+            skillchoice = choice(skills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(skills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Cleric":
+        character.armorproficiency.append("Light Armor")
+        character.armorproficiency.append("Medium Armor")
+        character.armorproficiency.append("Shields")
+
+        character.weaponproficiency.append("Simple Weapons")
+
+        character.throwproficiency.append("Wisdom")
+        character.throwproficiency.append("Charisma")
+
+        clericskills = ['History', 'Insight', 'Medicine', 'Persuasion',
+                'Religion']
+
+        done = False
+        while done == False:
+            skillchoice = choice(clericskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+        
+        done = False
+        while done == False:
+            skillchoice = choice(clericskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Druid":
+        character.armorproficiency.append("Light Armor (non-metal)")
+        character.armorproficiency.append("Medium Armor (non-metal)")
+        character.armorproficiency.append("Shields (non-metal)")
+
+        character.weaponproficiency.append("Clubs")
+        character.weaponproficiency.append("Daggers")
+        character.weaponproficiency.append("Darts")
+        character.weaponproficiency.append("Javelins")
+        character.weaponproficiency.append("Maces")
+        character.weaponproficiency.append("Quarterstaffs")
+        character.weaponproficiency.append("Scimitars")
+        character.weaponproficiency.append("Sickles")
+        character.weaponproficiency.append("Slings")
+        character.weaponproficiency.append("Spears")
+
+        character.toolproficiency.append("Herbalism kit")
+
+        character.throwproficiency.append("Intelligence")
+        character.throwproficiency.append("Wisdom")
+
+        druidskills = [
+            'Arcana', 'Amimal Handling', 'Insight', 'Medicine',
+            'Nature', 'Perception', 'Religion', 'Survival'
+            ]
+        done = False
+        while done == False:
+            skillchoice = choice(druidskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(druidskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Fighter":
+        character.armorproficiency.append("Light Armor")
+        character.armorproficiency.append("Medium Armor")
+        character.armorproficiency.append("Heavy Armor")
+        character.armorproficiency.append("Shields")
+    
+        character.weaponproficiency.append("Simple Weapons")
+        character.weaponproficiency.append("Martial Weapons")
+
+        character.throwproficiency.append("Strength")
+        character.throwproficiency.append("Constitution")
+
+        fighterskills = [
+            'Acrobatics', 'Animal Handling', 'Athletics', 'History',
+            'Insight', 'Intimidation', 'Perception', 'Survival'
+            ]
+        done = False
+        while done == False:
+            skillchoice = choice(fighterskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(fighterskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+                
+    elif character.jobclass == "Monk":
+        character.weaponproficiency.append("Simple Weapons")
+        character.weaponproficiency.append("Shortswords")
+
+        whichchoice = choice(['Artisan', 'Instrument'], 1)
+        if whichchoice == 'Artisan':
+            done = False
+            while done == False:
+                instrchoice = choice(instruments, 1)[0]
+                if instrchoice in character.toolproficiency:
+                    continue
+                else:
+                    character.toolproficiency.append(instrchoice)
+                    done = True
+        else:
+            done = False
+            while done == False:
+                artisanchoice = choice(artisantools, 1)[0]
+                if artisanchoice in character.toolproficiency:
+                    continue
+                else:
+                    character.toolproficiency.append(artisanchoice)
+                    done = True
+        
+        character.throwproficiency("Strength")
+        character.throwproficiency("Dexterity")
+        
+        monkskills = [
+            'Acrobatics', 'Athletics', 'History', 'Insight', 'Religion',
+            'Stealth'
+            ]
+        done = False
+        while done == False:
+            skillchoice = choice(monkskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(monkskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+        
+    elif character.jobclass == "Paladin":
+        character.armorproficiency.append("Light Armor")
+        character.armorproficiency.append("Medium Armor")
+        character.armorproficiency.append("Heavy Armor")
+        character.armorproficiency.append("Shields")
+    
+        character.weaponproficiency.append("Simple Weapons")
+        character.weaponproficiency.append("Martial Weapons")
+
+        character.throwproficiency.append("Wisdom")
+        character.throwproficiency.append("Charisma")
+
+        paladinskills = [
+            'Athletics', 'Insight', 'Intimidation', 'Medicine', 'Persuasion',
+            'Religion'
+            ]
+        done = False
+        while done == False:
+            skillchoice = choice(paladinskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(paladinskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Ranger":
+        character.armorproficiency.append("Light Armor")
+        character.armorproficiency.append("Medium Armor")
+        character.armorproficiency.append("Shields")
+
+        character.weaponproficiency.append("Simple Weapons")
+        character.weaponproficiency.append("Martial Weapons")
+
+        character.throwproficiency.append("Strength")
+        character.throwproficiency.append("Dexterity")
+
+        rangerskills = [
+            'Animal Handling', 'Athletics', 'Insight', 'Investigation',
+            'Nature', 'Perception', 'Stealth', 'Survival'
+            ]
+        done = False
+        while done == False:
+            skillchoice = choice(rangerskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(rangerskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+    
+        done = False
+        while done == False:
+            skillchoice = choice(rangerskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Rogue":
+        character.armorproficiency.append("Light Armor")
+
+        character.weaponproficiency.append("Simple Weapons")
+        character.weaponproficiency.append("Hand Crossbows")
+        character.weaponproficiency.append("Longswords")
+        character.weaponproficiency.append("Rapiers")
+        character.weaponproficiency.append("Shortswords")
+
+        character.toolproficiency.append("Thieves\'s tools")
+
+        character.throwproficiency.append("Dexterity")
+        character.throwproficiency.append("Intelligence")
+
+        rogueskills = [
+            'Acrobatics', 'Athletics', 'Deception', 'Insight',
+            'Intimidation', 'Investigation', 'Perception', 'Performance',
+            'Persuasion', 'Sleight of Hand', 'Stealth'
+            ]
+        done = False
+        while done == False:
+            skillchoice = choice(rogueskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+    
+        done = False
+        while done == False:
+            skillchoice = choice(rogueskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(rogueskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+    
+        done = False
+        while done == False:
+            skillchoice = choice(rogueskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Sorcerer":
+        character.weaponproficiency.append("Daggers")
+        character.weaponproficiency.append("Darts")
+        character.weaponproficiency.append("Slings")
+        character.weaponproficiency.append("Quarterstaffs")
+        character.weaponproficiency.append("Light Crossbows")
+
+        character.throwproficiency.append("Constitution")
+        character.throwproficiency.append("Charisma")
+    
+        sorcererskills = [
+            'Arcana', 'Deception', 'Insight', 'Intimidation', 'Persuasion',
+            'Religion'
+            ]
+    
+        done = False
+        while done == False:
+            skillchoice = choice(sorcererskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+    
+        done = False
+        while done == False:
+            skillchoice = choice(sorcererskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Warlock":
+        character.armorproficiency.append("Light Armor")
+
+        character.weaponproficiency.append("Simple Weapons")
+
+        character.throwproficiency.append("Wisdom")
+        character.throwproficiency.append("Charisma")
+
+        warlockskills = [
+            'Arcana', 'Deception', 'Insight', 'Intimidation', 'Nature',
+            'Religion', 'History'
+            ]
+        
+        done = False
+        while done == False:
+            skillchoice = choice(warlockskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+        
+        done = False
+        while done == False:
+            skillchoice = choice(warlockskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+    elif character.jobclass == "Wizard":
+        character.weaponproficiency.append("Daggers")
+        character.weaponproficiency.append("Darts")
+        character.weaponproficiency.append("Slings")
+        character.weaponproficiency.append("Quarterstaffs")
+        character.weaponproficiency.append("Light Crossbows")
+   
+        character.throwproficiency.append("Intelligence")
+        character.throwproficiency.append("Wisdom")
+
+        wizardskills = [
+            'Arcana', 'History', 'Insight', 'Investigation', 'Medicine',
+            'Religion'
+            ]
+
+        done = False
+        while done == False:
+            skillchoice = choice(wizardskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
+        done = False
+        while done == False:
+            skillchoice = choice(wizardskills, 1)[0]
+            if skillchoice in character.skillproficiency:
+                continue
+            else:
+                character.skillproficiency.append(skillchoice)
+                done = True
+
 def main():
     ''' Return a generated tabletop character'''
     # Set up parsing for command line args
@@ -986,6 +1838,9 @@ def main():
             " STATS in the form of 'STR, DEX, CON, INT, WIS, CHA', "
             " set to 'None' to not generate", 
             metavar="STATS", dest="userstats")
+    parser.add_option("--fluff", help="only generate non-statblock portions"
+            " of character and then output", action="store_true",
+            dest="fluff", default=False)
     
     opts, args = parser.parse_args()
     
@@ -1013,6 +1868,11 @@ def main():
     else:
         chooserace(newcharacter)
 
+    # If fluff is set, then just stop here and we're done
+    if opts.fluff == True:
+        print newcharacter
+        return
+
     if opts.userstats != "None":       
         if opts.userstats:
             userstats = map(int, opts.userstats.split(','))
@@ -1026,7 +1886,9 @@ def main():
         else:
             choosestats(newcharacter)
             chooseracestatbonuses(newcharacter)
-    
+
+    genextras(newcharacter)
+
     print newcharacter
 
 main()
