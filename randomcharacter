@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from numpy.random import choice
 from optparse import OptionParser
+import textwrap
 '''Return a randomly generated tabletop character'''
 #   Tool to create a random character using the character creation options
 #       from 5e D&D books. Useful for creating NPCs or getting an idea for
@@ -54,6 +55,24 @@ gamingsets = [
     'Dice set', 'Dragonchess set', 'Playing Card set', 'Three-Dragon Ante set'
     ]
 
+simplemeleeweapons = [
+    'Club', 'Dagger', 'Greatclub', 'Handaxe', 'Javelin', 'Light Hammer',
+    'Mace', 'Quarterstaff', 'Sickle', 'Spear'
+    ]
+simplerangedweapons = [
+    'Light Crossbow', 'Dart', 'Shortbow', 'Sling'
+    ]
+simpleweapons = simplemeleeweapons + simplerangedweapons
+martialmeleeweapons = [
+    'Battleaxe', 'Flail', 'Glaive', 'Greataxe', 'Greatsword', 'Halberd',
+    'Lance', 'Longsword', 'Maul', 'Morningstar', 'Pike', 'Rapier',
+    'Scimitar', 'Shortsword', 'Trident', 'War Pick', 'Warhammer', 'Whip'
+    ]
+martialrangedweapons = [
+    'Blowgun', 'Hand Crossbow', 'Heavy Crossbow', 'Longbow', 'Net'
+    ]
+martialweapons = martialmeleeweapons + martialrangedweapons
+
 class character( object ):
     '''Object to store all character vars'''
     def __init__( self ):
@@ -75,33 +94,51 @@ class character( object ):
         self.toolproficiency = []
         self.languageproficiency = []
 
+        self.gear = []
+
         self.proficiencybonus = 2
 
     def __str__(self):
         returner = self.race
         if self.jobclass != 'None':
             returner += " "+self.jobclass
-        returner += " ("+self.background+")\n"
-        returner += "I value "+self.ideal
-        returner += "\n"+self.trait
-        returner += "\n"+self.bond
-        returner += "\n"+self.flaw
+        returner += " ("+self.background+")\n\n--FLUFF--\n"
+        returner += textwrap.fill("I value "+self.ideal, 75)
+        returner += "\n\n"+textwrap.fill(self.trait, 75)
+        returner += "\n\n"+textwrap.fill(self.bond, 75)
+        returner += "\n\n"+textwrap.fill(self.flaw, 75)
        
         if self.stat[0] != 0:
-            returner += "\n"
+            returner += "\n\n--CRUNCH--"
             returner +="\nSTR: "+str(self.stat[0])+" DEX: "+str(self.stat[1])
             returner +=" CON: "+str(self.stat[2])
             returner +=" INT: "+str(self.stat[3])+" WIS: "+str(self.stat[4])
             returner += " CHA: "+str(self.stat[5])
         
-        print self.skillproficiency
-        print self.armorproficiency
-        print self.weaponproficiency
-        print self.throwproficiency
-        print self.toolproficiency
-        print self.languageproficiency
+        if len(self.skillproficiency) != 0:
+            returner += "\nSkills: "
+            returner += ', '.join(map(str, self.skillproficiency))
+            returner += "\nArmor: "
+            returner += ', '.join(map(str, self.armorproficiency))
+            returner += "\nWeapons: "
+            returner += ', '.join(map(str, self.weaponproficiency))
+            returner += "\nSaving Throws: "
+            returner += ', '.join(map(str, self.throwproficiency))
+            returner += "\nTools: "
+            returner += ', '.join(map(str, self.toolproficiency))
+            returner += "\nLanguages: "
+            returner += ', '.join(map(str, self.languageproficiency))
 
-
+        if len(self.gear) != 0:
+            gearcount = dict((x, self.gear.count(x)) for x in set(self.gear))
+            self.gear = list(set(self.gear))
+            for i in self.gear:
+                if gearcount[i] != 1:
+                    newgear = i + " (" + str(gearcount[i]) + ")"
+                    self.gear = [newgear if x==i else x for x in self.gear]
+            returner += "\n\nEquipment: "
+            returner += ', '.join(map(str, self.gear))
+        
         return returner
 
 def choosebackground(character):
@@ -1103,7 +1140,7 @@ def genextras(character):
         character.languageproficiency.append("Common")
         humanlangs = languages
         humanlangs.remove('Common')
-        character.languageproficiency.append(choice(humanlangs, 1)[0][0])
+        character.languageproficiency.append(choice(humanlangs, 1)[0])
 
     elif character.race == "Dragonborn":
         character.languageproficiency.append("Common")
@@ -1123,7 +1160,7 @@ def genextras(character):
         halfelflangs = languages
         halfelflangs.remove('Common')
         halfelflangs.remove('Elvish')
-        character.languageproficiency.append(halfelflangs, 1)[0][0]
+        character.languageproficiency.append(choice(halfelflangs, 1)[0])
     
         skillchoice = choice(skills, 2, replace=False)
         character.skillproficiency.append(skillchoice[0])
@@ -1352,21 +1389,31 @@ def genextras(character):
         
         done = False
         while done == False:
-            skillchoice = choice(['Animal Handling', 'Athletics', 'Intimidation', 'Nature', 'Perception', 'Survival'], 1)
+            skillchoice = choice(["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 1)
             if skillchoice in character.skillproficiency:
                 continue
             else:
-                character.skillproficiency.append(skillchoice)
+                character.skillproficiency.append(skillchoice[0])
                 done = True
 
         done = False
         while done == False:
-            skillchoice = choice(['Animal Handling', 'Athletics', 'Intimidation', 'Nature', 'Perception', 'Survival'], 1)
+            skillchoice = choice(["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 1)
             if skillchoice in character.skillproficiency:
                 continue
             else:
-                character.skillproficiency.append(skillchoice)
+                character.skillproficiency.append(skillchoice[0])
                 done = True
+
+        character.gear.append(choice(martialmeleeweapons, 1)[0])
+        character.gear.append(choice(simpleweapons, 1)[0])
+        character.gear.append("Explorer\'s Pack")
+        character.gear.append("Javelin")
+        character.gear.append("Javelin")
+        character.gear.append("Javelin")
+        character.gear.append("Javelin")
+        if "Handaxe" in character.gear:
+            character.gear.append("Handaxe")
 
     elif character.jobclass == "Bard":
         character.armorproficiency.append("Light Armor")
@@ -1434,6 +1481,16 @@ def genextras(character):
                 character.skillproficiency.append(skillchoice)
                 done = True
 
+        bardweps = simplemeleeweapons
+        bardweps.append("Rapier")
+        bardweps.append("Longsword")
+        character.gear.append(choice(bardweps, 1))
+        character.gear.append(choice(["Diplomat\'s Pack", 
+            "Entertainer\'s Pack"], 1))
+        character.gear.append(choice(instruments, 1))
+        character.gear.append("Leather Armor")
+        character.gear.append("Dagger")
+
     elif character.jobclass == "Cleric":
         character.armorproficiency.append("Light Armor")
         character.armorproficiency.append("Medium Armor")
@@ -1444,8 +1501,8 @@ def genextras(character):
         character.throwproficiency.append("Wisdom")
         character.throwproficiency.append("Charisma")
 
-        clericskills = ['History', 'Insight', 'Medicine', 'Persuasion',
-                'Religion']
+        clericskills = ["History", "Insight", "Medicine", "Persuasion",
+                "Religion"]
 
         done = False
         while done == False:
@@ -1464,6 +1521,17 @@ def genextras(character):
             else:
                 character.skillproficiency.append(skillchoice)
                 done = True
+        
+        character.gear.append("Mace")
+        character.gear.append(choice(["Scale Mail", "Leather Armor"], 1))
+        character.gear.append(choice(simpleweapons, 1))
+        character.gear.append(choice(["Priest\'s Pack", "Explorer\'s Pack"], 1))
+        character.gear.append("Shield")
+        character.gear.append("Holy Symbol")
+        for i in character.gear:
+            if "Crossbow" in str(i):
+                for i in range(0, 20):
+                    character.gear.append("Bolt")
 
     elif character.jobclass == "Druid":
         character.armorproficiency.append("Light Armor (non-metal)")
@@ -1487,8 +1555,8 @@ def genextras(character):
         character.throwproficiency.append("Wisdom")
 
         druidskills = [
-            'Arcana', 'Amimal Handling', 'Insight', 'Medicine',
-            'Nature', 'Perception', 'Religion', 'Survival'
+            "Arcana", "Amimal Handling", "Insight", "Medicine",
+            "Nature", "Perception", "Religion", "Survival"
             ]
         done = False
         while done == False:
@@ -1507,6 +1575,16 @@ def genextras(character):
             else:
                 character.skillproficiency.append(skillchoice)
                 done = True
+
+        druidweps = simpleweapons
+        druidweps.append("Shield")
+        character.gear.append(choice(druidweps, 1))
+        druidweps = simplemeleeweapons
+        druidweps.append("Scimitar")
+        character.gear.append(choice(druidweps, 1))
+        character.gear.append("Leather Armor")
+        character.gear.append("Explorer\'s Pack")
+        character.gear.append("Druidic Focus")
 
     elif character.jobclass == "Fighter":
         character.armorproficiency.append("Light Armor")
@@ -1521,8 +1599,8 @@ def genextras(character):
         character.throwproficiency.append("Constitution")
 
         fighterskills = [
-            'Acrobatics', 'Animal Handling', 'Athletics', 'History',
-            'Insight', 'Intimidation', 'Perception', 'Survival'
+            "Acrobatics", "Animal Handling", "Athletics", "History",
+            "Insight", "Intimidation", "Perception", "Survival"
             ]
         done = False
         while done == False:
@@ -1541,7 +1619,39 @@ def genextras(character):
             else:
                 character.skillproficiency.append(skillchoice)
                 done = True
-                
+
+        firstchoice = choice(["yes", "no"], 1)
+        if firstchoice[0] == "yes":
+            character.gear.append("Chain Mail")
+        else:
+            character.gear.append("Leather Armor")
+            character.gear.append("Longbow")
+            for i in range(0, 20):
+                character.gear.append("Arrow")
+        
+        firstchoice = choice(["yes", "no"], 1)
+        if firstchoice[0] == "yes":
+            character.gear.append("Shield")
+            character.gear.append(choice(martialweapons, 1))
+        else: 
+            character.gear.append(choice(martialweapons, 1))
+            character.gear.append(choice(martialweapons, 1))
+        
+        firstchoice = choice(["yes", "no"], 1)
+        if firstchoice[0] == "yes":
+            character.gear.append("Light Crossbow")
+            for i in range(0, 20):
+                character.gear.append("Bolt")
+        else:
+            character.gear.append("Handaxe") 
+            character.gear.append("Handaxe") 
+
+        firstchoice = choice(["yes", "no"], 1)
+        if firstchoice[0] == "yes":
+            character.gear.append("Dungeoneer\'s Pack")
+        else:
+            character.gear.append("Explorer\'s Pack")
+
     elif character.jobclass == "Monk":
         character.weaponproficiency.append("Simple Weapons")
         character.weaponproficiency.append("Shortswords")
@@ -1566,12 +1676,12 @@ def genextras(character):
                     character.toolproficiency.append(artisanchoice)
                     done = True
         
-        character.throwproficiency("Strength")
-        character.throwproficiency("Dexterity")
+        character.throwproficiency.append("Strength")
+        character.throwproficiency.append("Dexterity")
         
         monkskills = [
-            'Acrobatics', 'Athletics', 'History', 'Insight', 'Religion',
-            'Stealth'
+            "Acrobatics", "Athletics", "History", "Insight", "Religion",
+            "Stealth"
             ]
         done = False
         while done == False:
@@ -1604,8 +1714,8 @@ def genextras(character):
         character.throwproficiency.append("Charisma")
 
         paladinskills = [
-            'Athletics', 'Insight', 'Intimidation', 'Medicine', 'Persuasion',
-            'Religion'
+            "Athletics", "Insight", "Intimidation", "Medicine", "Persuasion",
+            "Religion"
             ]
         done = False
         while done == False:
@@ -1637,8 +1747,8 @@ def genextras(character):
         character.throwproficiency.append("Dexterity")
 
         rangerskills = [
-            'Animal Handling', 'Athletics', 'Insight', 'Investigation',
-            'Nature', 'Perception', 'Stealth', 'Survival'
+            "Animal Handling", "Athletics", "Insight", "Investigation",
+            "Nature", "Perception", "Stealth", "Survival"
             ]
         done = False
         while done == False:
@@ -1682,9 +1792,9 @@ def genextras(character):
         character.throwproficiency.append("Intelligence")
 
         rogueskills = [
-            'Acrobatics', 'Athletics', 'Deception', 'Insight',
-            'Intimidation', 'Investigation', 'Perception', 'Performance',
-            'Persuasion', 'Sleight of Hand', 'Stealth'
+            "Acrobatics", "Athletics", "Deception", "Insight",
+            "Intimidation", "Investigation", "Perception", "Performance",
+            "Persuasion", "Sleight of Hand", "Stealth"
             ]
         done = False
         while done == False:
@@ -1733,8 +1843,8 @@ def genextras(character):
         character.throwproficiency.append("Charisma")
     
         sorcererskills = [
-            'Arcana', 'Deception', 'Insight', 'Intimidation', 'Persuasion',
-            'Religion'
+            "Arcana", "Deception", "Insight", "Intimidation", "Persuasion",
+            "Religion"
             ]
     
         done = False
@@ -1764,8 +1874,8 @@ def genextras(character):
         character.throwproficiency.append("Charisma")
 
         warlockskills = [
-            'Arcana', 'Deception', 'Insight', 'Intimidation', 'Nature',
-            'Religion', 'History'
+            "Arcana", "Deception", "Insight", "Intimidation", "Nature",
+            "Religion", "History"
             ]
         
         done = False
@@ -1797,8 +1907,8 @@ def genextras(character):
         character.throwproficiency.append("Wisdom")
 
         wizardskills = [
-            'Arcana', 'History', 'Insight', 'Investigation', 'Medicine',
-            'Religion'
+            "Arcana", "History", "Insight", "Investigation", "Medicine",
+            "Religion"
             ]
 
         done = False
@@ -1873,6 +1983,7 @@ def main():
         print newcharacter
         return
 
+    # If user passed in custom stats or negated var, skip; otherwise gen stats
     if opts.userstats != "None":       
         if opts.userstats:
             userstats = map(int, opts.userstats.split(','))
@@ -1887,6 +1998,13 @@ def main():
             choosestats(newcharacter)
             chooseracestatbonuses(newcharacter)
 
+    # Generate proficiencies and equipment gained from class/race/background
+    # Do it in one stupid giant function so we only have to check
+    # race/class/background once
+    #
+    # Hope is that anyone who wants proficiencies also wants gear and vice
+    # versa. 
+    # TODO: update so not so naive
     genextras(newcharacter)
 
     print newcharacter
